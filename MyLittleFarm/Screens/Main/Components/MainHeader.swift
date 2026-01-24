@@ -1,0 +1,43 @@
+//
+//  MainHeader.swift
+//  MyLittleFarm
+//
+//  Created by user on 23.01.2026.
+//
+
+import SwiftUI
+
+struct MainHeader: View {
+    @EnvironmentObject var storageManager : StorageManager
+    var body: some View {
+        HStack{
+            Spacer()
+            ForEach(CropType.allCases){item in
+                let value = switch item{
+                case .hay: storageManager.hay
+                case .carrot: storageManager.carrot
+                case .grain: storageManager.grain
+                }
+                
+                HStack(spacing: 0){
+                    Text(item.icon)
+                    Text("\(min(999, value))")
+                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal)
+                        .transition(.symbolEffect)
+                }
+                .padding(10)
+                .background(
+                    RoundedRectangle(cornerRadius: 15)
+                        .fill(.black.opacity(0.6))
+                )
+                .frame(maxWidth: .infinity)
+            }
+        }.padding(.horizontal)
+    }
+}
+
+#Preview {
+    MainHeader()
+        .environmentObject(StorageManager.shared)
+}
