@@ -12,17 +12,24 @@ import Combine
 @MainActor
 final class CropViewModel: ObservableObject {
 
-    @Published var fields: [Field] = [Field()]
+    @Published var fields: [Field] = []
     @Published var now: Date = Date()
     @Published var animateID: UUID? = nil
     @Published var lastAmount: String = ""
     
     private var timer: Timer?
-
+    
+    let storage = StructureStorage.shared
+    let statStorage = StorageManager.shared
     init() {
+        fields = storage.load()
         startTimer()
     }
-
+    
+    private func persist() {
+        storage.save(fields)
+    }
+    
     private func startTimer() {
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
             DispatchQueue.main.async {
@@ -39,6 +46,9 @@ final class CropViewModel: ObservableObject {
         if let index = fields.firstIndex(where: { $0.id == id}) {
             fields[index].plant(crop)
         }
+        
+        
+        persist()
     }
     
     func harvestCrop(id: UUID) {
@@ -51,6 +61,20 @@ final class CropViewModel: ObservableObject {
                 lastAmount = "Failure"
             }
         }
+        
+        
+        persist()
+    }
+    
+    func addField() {
+        if statStorage.balance <= 15 {
+//            TODO: Add warning handler
+        }else{
+            statStorage.add(-15, key: .balance)
+            fields.append(Field())
+        }
+        
+        persist()
     }
 }
 

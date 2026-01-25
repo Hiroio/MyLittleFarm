@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum CropType: String, Identifiable, CaseIterable {
+enum CropType: String, Identifiable, CaseIterable, Codable {
     case hay
     case carrot
     case grain
@@ -25,14 +25,7 @@ enum CropType: String, Identifiable, CaseIterable {
     }
     
     var icon: String{
-        switch self {
-        case .hay:
-            "🫔"
-        case .carrot:
-            "🥕"
-        case .grain:
-            "🌾"
-        }
+        self.rawValue.capitalized
     }
 }
 
@@ -45,3 +38,6 @@ extension CropType {
         }
     }
 }
+
+
+

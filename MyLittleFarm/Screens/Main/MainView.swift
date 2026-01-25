@@ -8,104 +8,53 @@
 import SwiftUI
 
 struct MainView: View {
-    @StateObject var cropVM: CropViewModel = .init()
-    @State private var prepateToPlant: Bool = false
+    @EnvironmentObject var cropVM: CropViewModel
 
     var body: some View {
-        VStack{
+        VStack(spacing: 15){
             MainHeader()
-            
-            List(cropVM.fields){ i in
-                HStack{
-                    if let crop = i.crop{
-                        Text(crop.icon)
-                    }else{
-                        Text("🪏")
-                    }
-                    Text("Field")
+            HStack{
+                Text("^[\(cropVM.fields.count) Field](inflect: true)")
+                    .font(.title2.bold())
 
-                    
-                    Spacer()
-                    
-//                    MARK: - Monitoring for time to harvest
-                    Group{
-                        if i.occupied {
-                            if let remaining = i.timeRemaining(now: cropVM.now) {
-                                if i.isReadyToHarvest(now: cropVM.now) {
-                                    Button{
-                                        cropVM.harvestCrop(id: i.id)
-                                    }label:{
-                                        Text("Ready to harvest!")
-                                            .underline(true)
-                                            .foregroundColor(.green)
-                                    }
-                                } else {
-                                    Text(" \(format(remaining))")
-                                    UITimer(progres: Double(remaining / 15))
-                                        .scaleEffect(1.7)
-                                        .padding(.horizontal)
-                                }
-                            }
+                Spacer()
+                
+                
+                    Button{
+                        withAnimation(){
+                            cropVM.addField()
                         }
+                    }label: {
+                        VStack{
+                        Text("+")
+                            .font(.title)
+                            .foregroundStyle(.white)
+                            .padding(.horizontal)
+                            .padding(.vertical, 5)
+                            .background(
+                                RoundedRectangle(cornerRadius: 15)
+                                    .fill(.brown)
+                            )
+                        Text("15 🔅")
+                                .foregroundStyle(.yellow)
+                            .font(.caption)
                     }
-                    
-                    
-//                    MARK: monitoring for occupation
-                    Circle()
-                        .fill(i.occupied ? .red : .green)
-                        .fixedSize()
-                    
-                    
-//                    MARK: Simple plant
-                    if !(i.occupied){
-                            if prepateToPlant{
-                                ForEach(CropType.allCases){ item in
-                                    Button{
-                                        cropVM.plantCrop(id: i.id, crop: item)
-                                        prepateToPlant = false
-                                    }label:{
-                                        Text(item.icon)
-                                            .padding(5)
-                                            .background(
-                                                Circle()
-                                                    .fill(.white)
-                                                    .shadow(radius: 4)
-                                            )
-                                    }.buttonStyle(.glass)
-                                }
-                            }else{
-                                Button{
-                                    prepateToPlant = true
-                                }label:{
-                                    Text("Plant")
-                                        .foregroundStyle(.white)
-                                        .padding(8)
-                                        .background(
-                                            RoundedRectangle(cornerRadius: 15)
-                                                .fill(.green)
-                                        )
-                                }
-                            }
-                        
-                    }
+
                 }
-                .animation(.easeInOut, value: prepateToPlant)
-                .animation(.easeInOut, value: i.occupied)
-                .overlay(alignment: .leading){
-                    Group{
-                        if i.id == cropVM.animateID{
-                            AmountAnimation(amount: cropVM.lastAmount)
-                                .onAppear{
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 3.0){
-                                        cropVM.animateID = nil
-                                    }
-                                }
-                        }
-                    }
+            }
+            .padding()
+            VStack{
+                List(cropVM.fields){ i in
+                    ListOfFields(i: i)
+                    
                 }
+                .listRowSpacing(0)
+                .listStyle(.plain)
             }
             Spacer()
         }
+        .fontDesign(.monospaced)
+        .environmentObject(cropVM)
     }
     private func format(_ interval: TimeInterval) -> String {
         let minutes = Int(interval) / 60
@@ -117,4 +66,5 @@ struct MainView: View {
 #Preview {
     MainView()
         .environmentObject(StorageManager.shared)
+        .environmentObject(CropViewModel())
 }

@@ -8,11 +8,24 @@
 import Foundation
 
 
-struct Field: Identifiable {
-    let id = UUID()
+struct Field: Identifiable, Codable {
+    let id: UUID
     private(set) var occupied: Bool = false
     private(set) var crop: CropType? = nil
     private(set) var plantedAt: Date? = nil
+    
+    
+    init(
+        id: UUID = UUID(),
+        occupied: Bool = false,
+        crop: CropType? = nil,
+        plantedAt: Date? = nil
+    ) {
+        self.id = id
+        self.occupied = occupied
+        self.crop = crop
+        self.plantedAt = plantedAt
+    }
     
 //    MARK: if ready to harvest
     var readyToHarvest: Bool {
