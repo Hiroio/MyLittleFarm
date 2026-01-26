@@ -22,12 +22,12 @@ final class CropViewModel: ObservableObject {
     let storage = StructureStorage.shared
     let statStorage = StorageManager.shared
     init() {
-        fields = storage.load()
+        fields = storage.load(true)
         startTimer()
     }
     
     private func persist() {
-        storage.save(fields)
+        storage.save(fields, true)
     }
     
     private func startTimer() {

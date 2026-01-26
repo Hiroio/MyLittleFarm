@@ -95,9 +95,11 @@ struct ListOfFields: View {
                                         .fill(.white)
                                         .shadow(radius: 4)
                                 )
+                                .contentShape(.circle)
                         }
+                        .buttonStyle(PlainButtonStyle())
                     }
-                    .padding(10)
+                    .padding(.horizontal, 5)
                 }
                 
             }
@@ -147,7 +149,9 @@ func Harvest(
         
     } else {
         Button {
-            isPresented.wrappedValue = true
+            withAnimation(){
+                isPresented.wrappedValue = true
+            }
         } label: {
             Text("Plant")
                 .foregroundStyle(.white)

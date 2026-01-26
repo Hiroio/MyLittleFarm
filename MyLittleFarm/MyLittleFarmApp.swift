@@ -9,7 +9,7 @@ import SwiftUI
 
 @main
 struct MyLittleFarmApp: App {
-    @StateObject var navManager: NavigationManager = .init()
+    @StateObject var navManager: NavigationManager = .shared
     @StateObject var cropVM: CropViewModel = .init()
     @StateObject var storageManager: StorageManager = .shared
     var body: some Scene {

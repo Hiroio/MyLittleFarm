@@ -17,7 +17,7 @@ struct MainHeader: View {
                 Text("\(min(9999, storageManager.balance))")
                     .fixedSize()
             }
-            .padding()
+            .padding(8)
             .background(
                 RoundedRectangle(cornerRadius: 15)
                     .fill(.yellow.opacity(0.4))

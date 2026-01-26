@@ -8,7 +8,7 @@
 import Foundation
 
 enum HomeNavigation: String, CaseIterable, Identifiable{
-    case market, fields, farm
+    case market, fields, barn
     
     var id: String{
         self.rawValue

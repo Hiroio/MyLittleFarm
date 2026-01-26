@@ -27,14 +27,12 @@ enum CropType: String, Identifiable, CaseIterable, Codable {
     var icon: String{
         self.rawValue.capitalized
     }
-}
-
-extension CropType {
-    func makeFeed() -> AnimalFeed {
-        switch self {
-        case .hay: return Hay()
-        case .carrot: return Carrot()
-        case .grain: return Grain()
+    
+    var price: Int{
+        switch self{
+        case .hay: 2
+        case .carrot: 2
+        case .grain: 1
         }
     }
 }

@@ -8,11 +8,36 @@
 import SwiftUI
 
 struct StatsComponent: View {
+    @EnvironmentObject var storage: StorageManager
+    let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack{
+            LazyVGrid(columns: columns) {
+                ForEach(CropType.allCases){item in
+                    var amount: Int{
+                        switch item {
+                        case .hay: return storage.hay
+                        case .carrot: return storage.carrot
+                        case .grain: return storage.grain
+                        }
+                    }
+                    HStack{
+                        Text("\(amount)")
+                        Image(item.icon)
+                    }
+                    .padding(8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 15)
+                            .fill(.brown.opacity(0.7))
+                            .shadow(radius: 5)
+                    )
+                }
+            }
+        }
     }
 }
 
 #Preview {
     StatsComponent()
+        .environmentObject(StorageManager.shared)
 }

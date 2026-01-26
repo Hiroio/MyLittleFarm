@@ -16,6 +16,12 @@ enum StorageEnums: String, CaseIterable{
     }
     
     var icon: String {
-        self.rawValue.capitalized
+        switch self {
+        case .balance:
+            return "Money"
+        default:
+            return self.rawValue.capitalized
+        }
+        
     }
 }

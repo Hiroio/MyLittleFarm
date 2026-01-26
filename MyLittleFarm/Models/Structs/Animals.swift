@@ -7,26 +7,35 @@
 
 import Foundation
 
-struct Cow: Animal{
-    func eat(_ feed: Hay) {
+struct Cow {
 
+    func eat() {
+        
+    }
+
+    func getProduct() {
+    }
+
+    func butch() {
     }
 }
 
-struct Horse: Animal{
-    func eat(_ feed: Carrot) {
 
-    }
-}
-
-struct Pig: Animal{
-    func eat(_ feed: Carrot) {
+struct Horse{
+    func eat() {
         
     }
 }
 
-struct Chicken: Animal{
-    func eat(_ feed: Grain) {
+struct Pig {
+    func eat() {
+        
+    }
+}
+
+struct Chicken{
+    
+    func eat() {
         
     }
 }

@@ -10,19 +10,25 @@ import SwiftUI
 struct AppRoot: View {
     @EnvironmentObject var navManager: NavigationManager
     var body: some View {
-        VStack{
-            switch navManager.navigationBottomBar {
-            case .market:
-                MarketView()
-            case .fields:
-                MainView()
-            case .farm:
-                EmptyView()
-            }
-            NavigationBottomBar()
+        ZStack{
+            VStack{
+                VStack{
+                    switch navManager.navigationBottomBar {
+                    case .market:
+                        MarketView()
+                    case .fields:
+                        MainView()
+                    case .barn:
+                        BarnView()
+                    }
+                }
+                .frame(maxHeight: .infinity)
+                NavigationBottomBar()
                 
-        }.ignoresSafeArea(edges: .bottom)
-        
+            }.ignoresSafeArea(edges: .bottom)
+            
+            WarningHolder()
+        }
     }
 }
 
