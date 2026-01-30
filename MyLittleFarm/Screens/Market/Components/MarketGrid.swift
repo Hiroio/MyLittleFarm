@@ -38,10 +38,22 @@ struct MarketGrid: View {
                             Text("Sell")
                                 .foregroundStyle(.white)
                                 .frame(maxWidth: .infinity)
-                                .padding(10)
+                                .padding(7)
                                 .background(
                                     RoundedRectangle(cornerRadius: 15)
-                                        .fill(.green.opacity(9.6))
+                                        .fill(.green.opacity(0.8))
+                                )
+                        }
+                        Button{
+                            market.sellAllItems(item)
+                        }label:{
+                            Text("Sell All")
+                                .foregroundStyle(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding(7)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 15)
+                                        .fill(.orange.opacity(0.8))
                                 )
                         }
                     }

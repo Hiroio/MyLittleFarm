@@ -9,8 +9,8 @@ import Foundation
 
 struct Cow {
 
-    func eat() {
-        
+    static func eat() -> Int{
+        return 60
     }
 
     func getProduct() {
@@ -22,20 +22,20 @@ struct Cow {
 
 
 struct Horse{
-    func eat() {
-        
+    static func eat() -> Int {
+        return 60 * 5
     }
 }
 
 struct Pig {
-    func eat() {
-        
+    static func eat() -> Int{
+        return 60 * 3
     }
 }
 
 struct Chicken{
     
-    func eat() {
-        
+    static func eat() -> Int {
+        return 30
     }
 }

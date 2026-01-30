@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AppRoot: View {
+    @EnvironmentObject var storageManager: StorageManager
     @EnvironmentObject var navManager: NavigationManager
     var body: some View {
         ZStack{
@@ -22,7 +23,22 @@ struct AppRoot: View {
                         BarnView()
                     }
                 }
-                .frame(maxHeight: .infinity)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .overlay(alignment: .topLeading){
+                    HStack{
+                        Image("Money")
+                            .foregroundStyle(.green)
+                        Text("\(min(9999, storageManager.balance))")
+                            .fixedSize()
+                    }
+                    .padding(7)
+                    .background(
+                        RoundedRectangle(cornerRadius: 15)
+                            .fill(.yellow.opacity(0.4))
+                            .shadow(radius: 2, x: 4, y: 3)
+                    )
+                    .padding(.horizontal)
+                }
                 NavigationBottomBar()
                 
             }.ignoresSafeArea(edges: .bottom)

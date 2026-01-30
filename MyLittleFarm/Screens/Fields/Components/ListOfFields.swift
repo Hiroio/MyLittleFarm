@@ -28,8 +28,8 @@ struct ListOfFields: View {
                 //                    MARK: - Monitoring for time to harvest
                 Group{
                     if i.occupied {
-                        if let remaining = i.timeRemaining(now: cropVM.now) {
-                            if i.isReadyToHarvest(now: cropVM.now) {
+                        if let remaining = i.timeRemaining(now: cropVM.timer.now) {
+                            if i.isReadyToHarvest(now: cropVM.timer.now) {
                                 Button{
                                     cropVM.harvestCrop(id: i.id)
                                 }label:{

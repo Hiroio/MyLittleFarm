@@ -22,7 +22,12 @@ final class StorageManager: ObservableObject {
     @Published private(set) var grain: Int = 0
 
 //    TODO: Animals
-    
+    @Published private(set) var milk: Int = 0
+    @Published private(set) var egg: Int = 0
+    @Published private(set) var beef: Int = 0
+    @Published private(set) var pork: Int = 0
+    @Published private(set) var chickenMeat: Int = 0
+    @Published private(set) var horse: Int = 0
     
     
 //    TODO: Structures
@@ -33,6 +38,7 @@ final class StorageManager: ObservableObject {
 
     // MARK: - Public API
 
+//    CROPS
     func add(_ amount: Int, for crop: CropType) {
         switch crop {
         case .hay:
@@ -47,6 +53,7 @@ final class StorageManager: ObservableObject {
         }
     }
     
+//    UTILITY
     func add(_ amount: Int, key: StorageEnums) {
             switch key {
             case .animals:
@@ -58,6 +65,26 @@ final class StorageManager: ObservableObject {
                 balance += amount
                 save(balance, key: key.storageKey)
         }
+    }
+
+//    Barn
+    func add(_ amount: Int, key: AnimalProducts){
+        switch key {
+        case .milk:
+            milk += amount
+        case .egg:
+            egg += amount
+        case .chicken:
+            chickenMeat += amount
+        case .pork:
+            pork += amount
+        case .beef:
+            beef += amount
+        case .horse:
+            horse += amount
+            
+        }
+        save(amount, key: key.storageKey)
     }
     
     func consume(_ amount: Int, for crop: CropType) -> Bool {

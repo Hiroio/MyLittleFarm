@@ -35,9 +35,13 @@ struct MainView: View {
                                 RoundedRectangle(cornerRadius: 15)
                                     .fill(.brown)
                             )
-                        Text("15 🔅")
-                                .foregroundStyle(.yellow)
-                            .font(.caption)
+                            HStack(spacing: 0){
+                                Text("15")
+                                    .foregroundStyle(.yellow)
+                                    .font(.caption.bold())
+                                Image("Money")
+                                    .scaleEffect(0.8)
+                            }
                     }
 
                 }

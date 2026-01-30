@@ -17,30 +17,28 @@ final class CropViewModel: ObservableObject {
     @Published var animateID: UUID? = nil
     @Published var lastAmount: String = ""
     
-    private var timer: Timer?
     
     let storage = StructureStorage.shared
     let statStorage = StorageManager.shared
+    let timer = TimerManager.shared
+    let navManager = NavigationManager.shared
+    
+    private var cancellables = Set<AnyCancellable>()
     init() {
         fields = storage.load(true)
-        startTimer()
+        
+        timer.$now
+            .sink { [weak self] now in
+                self?.handleTick(now)
+            }
+            .store(in: &cancellables)
     }
     
     private func persist() {
         storage.save(fields, true)
     }
     
-    private func startTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
-            DispatchQueue.main.async {
-                self?.now = Date()
-            }
-        }
-    }
 
-    deinit {
-        timer?.invalidate()
-    }
 
     func plantCrop(id: UUID, crop: CropType) {
         if let index = fields.firstIndex(where: { $0.id == id}) {
@@ -67,14 +65,18 @@ final class CropViewModel: ObservableObject {
     }
     
     func addField() {
-        if statStorage.balance <= 15 {
-//            TODO: Add warning handler
+        if statStorage.balance < 15 {
+            navManager.warning = .field(message: "Not enough Money!")
         }else{
             statStorage.add(-15, key: .balance)
             fields.append(Field())
         }
         
         persist()
+    }
+    
+    private func handleTick(_ now: Date) {
+        objectWillChange.send()
     }
 }
 

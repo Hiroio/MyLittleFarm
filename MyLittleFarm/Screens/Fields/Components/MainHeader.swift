@@ -11,17 +11,6 @@ struct MainHeader: View {
     @EnvironmentObject var storageManager : StorageManager
     var body: some View {
         HStack{
-            HStack{
-                Image("Money")
-                    .foregroundStyle(.green)
-                Text("\(min(9999, storageManager.balance))")
-                    .fixedSize()
-            }
-            .padding(8)
-            .background(
-                RoundedRectangle(cornerRadius: 15)
-                    .fill(.yellow.opacity(0.4))
-            )
             Spacer()
             ForEach(CropType.allCases){item in
                 let value = switch item{

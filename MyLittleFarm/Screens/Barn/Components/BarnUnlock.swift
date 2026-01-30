@@ -35,6 +35,8 @@ struct BarnUnlock: View {
             }
             
         }
+        .fontDesign(.monospaced)
+        .multilineTextAlignment(.center)
     }
 }
 

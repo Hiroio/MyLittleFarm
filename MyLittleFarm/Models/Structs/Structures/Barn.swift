@@ -25,4 +25,63 @@ struct BarnAnimal: Identifiable, Codable {
         self.isProductReady = isProductReady
         self.production = production
     }
+    
+    
+    mutating func feed(){
+        var interval = 0
+        
+        switch type {
+        case .cow:
+            interval = Cow.eat()
+        case .chicken:
+            interval = Chicken.eat()
+        case .pig:
+            interval = Pig.eat()
+        case .horse:
+            interval = Horse.eat()
+        }
+        
+        isFed = true
+        isProductReady = Calendar.current.date(byAdding: .second, value: interval, to: Date())
+    }
+    
+    mutating func getProduct() -> Int{
+        isFed = false
+        isProductReady = nil
+        production -= 1
+        
+        switch type{
+        case .pig, .horse:
+            return 1
+        default:
+            return Int.random(in: 1...2)
+        }
+    }
+    
+    mutating func getMeat() -> Int{
+        switch type {
+        case .cow:
+            5
+        case .chicken:
+            1
+        case .pig:
+            15
+        case .horse:
+            1
+        }
+    }
+}
+
+
+
+extension BarnAnimal{
+    func isReadyToGetProduct(now: Date) -> Bool {
+        guard isFed, let fedAt = isProductReady else { return false }
+        return now >= fedAt
+    }
+    
+    func timeRemaining(now: Date) -> TimeInterval {
+        guard isFed, let isProductReady else { return 0 }
+        return max(0, isProductReady.timeIntervalSince(now))
+    }
 }
