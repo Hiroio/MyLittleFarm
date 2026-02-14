@@ -18,3 +18,7 @@ enum HomeNavigation: String, CaseIterable, Identifiable{
         self.rawValue.capitalized
     }
 }
+
+enum MarketHeader: Hashable{
+    case all, crops, animals
+}

@@ -40,6 +40,8 @@ class BarnViewModel: ObservableObject {
     func addAnimal(animal: Animals) {
         if storage.balance <= animal.prices {
             navman.warning = .barn(message: "Not enough Money!")
+        }else if checkForCapacity(animal: animal){
+            navman.warning = .barn(message: "No room for a\nnew chicken!!")
         }else{
             let newAnimal = BarnAnimal(
                 type: animal,
@@ -64,6 +66,26 @@ class BarnViewModel: ObservableObject {
             barn.append(BarnAnimal(type: .chicken, production: 20))
             UserDefaults.standard.set(true, forKey: "Game.Barn.Unlock")
             persist()
+        }
+    }
+    
+    func unlockStructure(animal: Animals){
+        if storage.balance >= animal.structurePrice{
+            storage.add(-animal.structurePrice, key: .balance)
+            upgradeHouse(animal: animal)
+        }else{
+            navman.warning = .barn(message: "Not Enough Money!\n To build this...")
+        }
+    }
+    
+    func upgrade(animal: Animals){
+        let price = checkBalanceForStructure(balance: storage.balance, animal: animal)
+        if price <= storage.balance{
+            storage.add(-price, key: .balance)
+            upgradeHouse(animal: animal)
+        }else{
+            navman.warning = .barn(message: "Not Enough Money!")
+            return
         }
     }
     
@@ -97,12 +119,37 @@ class BarnViewModel: ObservableObject {
         }
     }
     
+    func feedAll(animal: Animals){
+        var foodCount: Int = switch animal.food {
+        case .hay:
+            storage.hay
+        case .carrot:
+            storage.carrot
+        case .grain:
+            storage.grain
+        }
+        if foodCount != 0{
+            for i in filter(type: animal){
+                if foodCount == 0 { return }
+                if let index = barn.firstIndex(where: {$0.id == i.id}){
+                    storage.add(-1, for: animal.food)
+                    foodCount -= 1
+                    barn[index].feed()
+                    persist()
+                }
+            }
+        }else{
+            navman.warning = .barn(message: "There's no Food!")
+        }
+    }
+    
     func getProduct(id: UUID){
         if let index = barn.firstIndex(where: {$0.id == id}){
             let animal = barn[index].type
             
             if animal == .pig || animal == .horse {
                 butch(id: id)
+                persist()
             }else{
                 let product = barn[index].getProduct()
                 storage.add(product, key: barn[index].type.output)
@@ -166,5 +213,45 @@ extension BarnViewModel{
             userDefault.set(newValue, forKey: "Game.Barn.Stable")
         }
     }
+    
+    private func upgradeHouse(animal: Animals){
+        switch animal {
+        case .cow:
+            cowShed += 1
+        case .chicken:
+            chickenCoop += 1
+        case .pig:
+            pigsty += 1
+        case .horse:
+            stable += 1
+        }
+    }
+    
+    private func checkBalanceForStructure(balance: Int, animal: Animals) -> Int{
+        switch animal {
+        case .cow:
+            cowShed * 15
+        case .chicken:
+            chickenCoop * 15
+        case .pig:
+            pigsty * 15
+        case .horse:
+            stable * 15
+        }
+    }
+    
+    private func checkForCapacity(animal: Animals) -> Bool{
+        switch animal {
+        case .cow:
+            self.filter(type: animal).count == cowShed * 5 ? true : false
+        case .chicken:
+            self.filter(type: animal).count == chickenCoop * 5 ? true : false
+        case .pig:
+            self.filter(type: animal).count == pigsty * 5 ? true : false
+        case .horse:
+            self.filter(type: animal).count == stable * 5 ? true : false
+        }
+    }
+    
 }
 

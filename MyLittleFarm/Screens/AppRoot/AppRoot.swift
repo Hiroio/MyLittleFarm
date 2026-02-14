@@ -39,7 +39,9 @@ struct AppRoot: View {
                     )
                     .padding(.horizontal)
                 }
-                NavigationBottomBar()
+//                NavigationBottomBar()
+                    TopNavBar()
+                        .shadow(radius: 2)
                 
             }.ignoresSafeArea(edges: .bottom)
             

@@ -104,6 +104,36 @@ final class StorageManager: ObservableObject {
         }
         return true
     }
+    
+    func consumeAnimal(_ amount: Int, for animal: AnimalProducts) -> Bool{
+        switch animal {
+        case .milk:
+            guard milk >= amount else { return false }
+            milk -= amount
+            save(milk, key: animal.storageKey)
+        case .egg:
+            guard egg >= amount else { return false }
+            egg -= amount
+            save(egg, key: animal.storageKey)
+        case .chicken:
+            guard chickenMeat >= amount else { return false }
+            chickenMeat -= amount
+            save(chickenMeat, key: animal.storageKey)
+        case .pork:
+            guard pork >= amount else { return false }
+            pork -= amount
+            save(pork, key: animal.storageKey)
+        case .beef:
+            guard beef >= amount else { return false }
+            beef -= amount
+            save(beef, key: animal.storageKey)
+        case .horse:
+            guard horse >= amount else { return false }
+            horse -= amount
+            save(horse, key: animal.storageKey)
+        }
+        return true
+    }
 
     // MARK: - Private
 

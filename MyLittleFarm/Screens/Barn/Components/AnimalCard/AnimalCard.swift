@@ -29,7 +29,7 @@ struct AnimalCard: View {
                     Spacer()
                     
                     Button{
-//                        TODO: UPGRADE
+                        barnVM.upgrade(animal: animal)
                     }label: {
                         Text("Upgrade")
                             .padding(7)
@@ -49,9 +49,9 @@ struct AnimalCard: View {
                             .scaleEffect(2.0)
                         Button{
                             if numberOfAnimals > 0{
-                                
+                                barnVM.feedAll(animal: animal)
                             }else{
-                                
+                                barnVM.addAnimal(animal: animal)
                             }
                         }label: {
                             Text(numberOfAnimals > 0 ? "Feed all" : "Buy one")
@@ -96,7 +96,7 @@ struct AnimalCard: View {
                         Text(animal.structure)
                         
                         Button{
-                            
+                            barnVM.unlockStructure(animal: animal)
                         }label:{
                             Text("Unlock \(animal.structurePrice)")
                                 .bold()

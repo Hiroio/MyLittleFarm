@@ -39,4 +39,21 @@ enum AnimalProducts: String, Identifiable, CaseIterable, Codable {
             self.rawValue.capitalized
         }
     }
+    
+    var price: Int{
+        switch self {
+        case .milk:
+            5
+        case .egg:
+            3
+        case .chicken:
+            5
+        case .pork:
+            5
+        case .beef:
+            5
+        case .horse:
+            60
+        }
+    }
 }

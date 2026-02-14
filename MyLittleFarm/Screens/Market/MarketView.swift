@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MarketView: View {
     @EnvironmentObject var storage: StorageManager
+    @State private var currentStat: MarketHeader = .crops
     var body: some View {
         VStack(spacing: 15){
 //            MARK: - HEADER
@@ -23,13 +24,15 @@ struct MarketView: View {
             }
             .padding(5)
 //            MARK: - Storage
-            StatsComponent()
+//            StatsComponent(currentStat: currentStat)
             
 //            MARK: - Market Grid
-            MarketGrid()
+            MarketGrid(currentStat: $currentStat)
+                .animation(.linear, value: currentStat)
             
             
         }
+
     }
 }
 
