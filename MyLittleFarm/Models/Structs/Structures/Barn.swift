@@ -16,6 +16,7 @@ struct BarnAnimal: Identifiable, Codable {
     var isFed: Bool
     var isProductReady: Date?
     var production: Int
+    var lastAmount: Int = 0
     
     init(id: UUID = UUID(), type: Animals, date: Date = Date(), isFed: Bool = false, isProductReady: Date? = nil, production: Int) {
         self.id = id
@@ -48,13 +49,24 @@ struct BarnAnimal: Identifiable, Codable {
     mutating func getProduct() -> Int{
         isFed = false
         isProductReady = nil
-        production -= 1
+        
         
         switch type{
         case .pig, .horse:
+            lastAmount = 1
+            production -= 1
             return 1
         default:
-            return Int.random(in: 1...2)
+            if production == 1{
+                lastAmount = 1
+                production = 0
+                return 1
+            }else{
+                let random = Int.random(in: 1...2)
+                production -= random
+                lastAmount = random
+                return random
+            }
         }
     }
     

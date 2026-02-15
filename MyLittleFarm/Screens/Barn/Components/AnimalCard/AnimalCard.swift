@@ -24,7 +24,7 @@ struct AnimalCard: View {
                     Image("Barn")
                     Text(animal.structure)
                     
-                    Text("\(numberOfAnimals)/\(15 * structureLVL)")
+                    Text("\(numberOfAnimals)/\(5 * structureLVL)")
                         .bold()
                     Spacer()
                     
@@ -42,29 +42,46 @@ struct AnimalCard: View {
                 
                 
                 HStack{
-                    VStack(spacing: 20){
+                    VStack(spacing: 15){
                         Text(animal.id.capitalized)
                             .bold()
                         Image(animal.icon)
                             .scaleEffect(2.0)
-                        Button{
-                            if numberOfAnimals > 0{
-                                barnVM.feedAll(animal: animal)
-                            }else{
-                                barnVM.addAnimal(animal: animal)
+                        VStack{
+                            Button{
+                                if numberOfAnimals > 0{
+                                    barnVM.feedAll(animal: animal)
+                                }else{
+                                    barnVM.addAnimal(animal: animal)
+                                }
+                            }label: {
+                                Text(numberOfAnimals > 0 ? "Feed all" : "Buy one")
+                                    .foregroundStyle(.black)
+                                    .padding(7)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 15)
+                                            .fill(numberOfAnimals > 0 ? .yellow : .green)
+                                    )
+                                
                             }
-                        }label: {
-                            Text(numberOfAnimals > 0 ? "Feed all" : "Buy one")
-                                .foregroundStyle(.black)
-                                .padding(7)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 15)
-                                        .fill(numberOfAnimals > 0 ? .yellow : .green)
-                                )
                             
+                            let readyToCollect = !barnVM.checkIfAnyReadyToCollect(animal: animal)
+                            Button{
+                                barnVM.massiveGetProduct(animal: animal)
+                            }label: {
+                                Text("Collect all")
+                                    .foregroundStyle(.black)
+                                    .padding(7)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 15)
+                                            .fill(.green)
+                                    )
+                            }
+                            .disabled(readyToCollect)
+                            .opacity(readyToCollect ? 0.4 : 1)
                         }
                     }
-                    .frame(height: 120)
+                    .frame(height: 150)
                     .padding()
                     .overlay(
                         RoundedRectangle(cornerRadius: 15)
@@ -80,7 +97,7 @@ struct AnimalCard: View {
                         
                     }
                     .padding(7)
-                    .frame(height: 150)
+                    .frame(height: 170)
                 }
                 .overlay(
                     RoundedRectangle(cornerRadius: 15)
@@ -113,7 +130,7 @@ struct AnimalCard: View {
         }
         .fontDesign(.monospaced)
         .frame(maxWidth: .infinity)
-        .frame(height: 200)
+        .frame(height: 220)
         .padding(8)
         .overlay(
             RoundedRectangle(cornerRadius: 15)

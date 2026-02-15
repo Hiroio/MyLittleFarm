@@ -12,6 +12,7 @@ import Combine
 class BarnViewModel: ObservableObject {
     
     @Published var barn: [BarnAnimal] = []
+    @Published var animateID: UUID? = nil
     
     let storage = StorageManager.shared
     let structureStorage = StructureStorage.shared
@@ -153,11 +154,34 @@ class BarnViewModel: ObservableObject {
             }else{
                 let product = barn[index].getProduct()
                 storage.add(product, key: barn[index].type.output)
+                animateID = id
                 persist()
             }
         }else{
             navman.warning = .barn(message: "Opps something went wrong!\nTry again!")
         }
+    }
+    
+    func massiveGetProduct(animal: Animals){
+        let animals = filter(type: animal)
+        var queue = 0.01
+        for i in animals{
+            if i.isReadyToGetProduct(now: timer.now){
+                if let index = barn.firstIndex(where: {$0.id == i.id}){
+                    let product = barn[index].getProduct()
+                    storage.add(product, key: barn[index].type.output)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + queue){
+                        self.animateID = i.id
+                    }
+                    queue += 0.01
+                    persist()
+                }
+            }
+        }
+    }
+    
+    func checkIfAnyReadyToCollect(animal: Animals) -> Bool{
+        filter(type: animal).filter({$0.isReadyToGetProduct(now: timer.now)}).count != 0
     }
     
     func butch(id: UUID){
